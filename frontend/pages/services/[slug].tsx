@@ -46,6 +46,13 @@ const ServicePage: NextPage<ServicePageProps> = ({ service, initialGirls = [], s
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
+  // Reset list when navigating between different services to avoid stale state
+  React.useEffect(() => {
+    setGirls(initialGirls || []);
+    setOffset((initialGirls || []).length);
+    setHasMore((initialGirls || []).length >= LIMIT);
+  }, [service?.slug, initialGirls]);
+
   const loadMore = async () => {
     if (loading || !hasMore || !service?.slug) return;
     setLoading(true);

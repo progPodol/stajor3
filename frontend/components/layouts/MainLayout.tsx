@@ -138,7 +138,7 @@ const locales = ["ru", "en"];
                       }`}
                     >
                       {services.map((service) => (
-                        <li key={service.slug}>
+                        <li key={`${service.slug}`}>
                           <h3>
                             <Link
                               href={`/services/${service.slug}`}
