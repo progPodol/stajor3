@@ -4,7 +4,7 @@ from database import get_db, AsyncSessions
 from src.core.settings import settings
 from src.managements.models import Sites
 from src.managements.schemas import SiteCreate
-from src.utils.tools import get_current_superuser
+from src.utils.tools import get_current_superuser, trigger_revalidate
 from fastapi import Form
 
 
@@ -65,5 +65,18 @@ async def edit_site_post(
     db.add(site)
     await db.commit()
     await db.refresh(site)
+
+    # Content visible across many pages might change; revalidate all service pages
+    try:
+        # Best-effort: load all services slugs and revalidate
+        from sqlalchemy.future import select as sa_select
+        from src.girls.models import Service
+        result = await db.execute(sa_select(Service))
+        services = result.scalars().all()
+        slugs = [s.slug for s in services if s.slug]
+        if slugs:
+            asyncio.create_task(trigger_revalidate(service_slugs=slugs))
+    except Exception:
+        pass
 
     return site

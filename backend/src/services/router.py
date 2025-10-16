@@ -10,7 +10,7 @@ from src.core.settings import settings
 from src.girls.models import Girls, Service
 from src.girls.schemas import GirlsRead
 from src.services.schemas import ServicesCreate, ServicesRead
-from src.utils.tools import get_current_superuser
+from src.utils.tools import get_current_superuser, trigger_revalidate
 
 router = APIRouter(tags=['Services'], prefix=settings.api.v1.services)
 
@@ -27,6 +27,12 @@ async def create_services(data: ServicesCreate, db: AsyncSessions = Depends(get_
     db.add(new_services)
     await db.commit()
     await db.refresh(new_services)
+    # Revalidate newly created service page
+    try:
+        if new_services.slug:
+            asyncio.create_task(trigger_revalidate(service_slug=new_services.slug))
+    except Exception:
+        pass
 
     return new_services
 

@@ -12,7 +12,7 @@ from database import get_db, AsyncSessions
 from src.core.settings import settings
 from src.girls.models import Girls, Service, ModelPhoto
 from src.girls.schemas import GirlsRead
-from src.utils.tools import process_photo, get_current_superuser
+from src.utils.tools import process_photo, get_current_superuser, trigger_revalidate
 
 
 router = APIRouter(tags=['Girls'], prefix=settings.api.v1.girls)
@@ -162,6 +162,16 @@ async def create_model(
     db.add(new_girl)
     await db.commit()
     await db.refresh(new_girl)
+
+    # Revalidate impacted service pages if services were selected
+    try:
+        impacted_slugs = []
+        if new_girl.services:
+            impacted_slugs = [s.slug for s in new_girl.services if s.slug]
+        if impacted_slugs:
+            asyncio.create_task(trigger_revalidate(service_slugs=impacted_slugs))
+    except Exception:
+        pass
 
     return RedirectResponse(url="/admin/models", status_code=303)
 

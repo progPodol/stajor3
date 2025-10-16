@@ -21,6 +21,8 @@ services:
       - "8000:8000"
     environment:
       DATABASE_URL: postgresql+asyncpg://nikita:password@db:5432/mydatabase
+      FRONTEND_INTERNAL_URL: http://frontend:3000
+      REVALIDATE_SECRET: "change-me-please"
     depends_on:
       db:
         condition: service_healthy
@@ -39,6 +41,7 @@ services:
       NEXT_PUBLIC_API_URL: "/api"
       NEXT_PUBLIC_CANONICAL_BASE_URL: "http://frontend:3000"
       API_INTERNAL_URL: "http://backend:8000/api"
+      REVALIDATE_SECRET: "change-me-please"
 
   nginx:
     image: nginx:latest

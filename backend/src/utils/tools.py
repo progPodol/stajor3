@@ -81,3 +81,42 @@ def get_current_superuser(current_user: User = Depends(get_current_user)) -> Use
         raise HTTPException(status_code=403, detail="У тебя нет доступа к ресурсу, так как ты не админ")
     return current_user
 
+
+async def trigger_revalidate(
+    *,
+    path: str | None = None,
+    paths: list[str] | None = None,
+    service_slug: str | None = None,
+    service_slugs: list[str] | None = None,
+) -> dict:
+    """Call Next.js revalidate API. Requires FRONTEND_INTERNAL_URL and REVALIDATE_SECRET.
+
+    Returns JSON response from frontend, or raises HTTPException on network errors.
+    """
+    url = f"{settings.FRONTEND_INTERNAL_URL}/api/revalidate"
+    payload: dict = {}
+    if path:
+        payload["path"] = path
+    if paths:
+        payload["paths"] = paths
+    if service_slug:
+        payload["serviceSlug"] = service_slug
+    if service_slugs:
+        payload["serviceSlugs"] = service_slugs
+
+    headers = {
+        "Content-Type": "application/json",
+        "x-revalidate-secret": settings.REVALIDATE_SECRET or "",  # must match frontend
+    }
+
+    try:
+        async with httpx.AsyncClient(timeout=10) as client:
+            resp = await client.post(url, json=payload, headers=headers)
+            resp.raise_for_status()
+            return resp.json()
+    except httpx.HTTPStatusError as exc:
+        # Bubble up with details for admin logs
+        raise HTTPException(status_code=exc.response.status_code, detail=f"Revalidate failed: {exc.response.text}")
+    except Exception as exc:  # network or unexpected
+        raise HTTPException(status_code=500, detail=f"Revalidate request error: {exc}")
+

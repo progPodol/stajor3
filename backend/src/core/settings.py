@@ -20,6 +20,8 @@ class Settings(BaseModel):
     SECRET_KEY: str = os.getenv("SECRET_KEY")
     ACCESS_TOKEN_EXPIRE_MINUTES: str = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
     ALGORITHM: str = os.getenv("ALGORITHM")
+    FRONTEND_INTERNAL_URL: str = os.getenv("FRONTEND_INTERNAL_URL", "http://frontend:3000")
+    REVALIDATE_SECRET: str = os.getenv("REVALIDATE_SECRET", "")
 
     api: ApiPrefix = ApiPrefix()
 

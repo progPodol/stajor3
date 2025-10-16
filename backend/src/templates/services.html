@@ -32,6 +32,11 @@
           </td>
           <td><code>{{ service.slug }}</code></td>
           <td class="text-end">
+            <form action="/admin/services/{{ service.slug }}/revalidate" method="post" class="d-inline">
+              <button type="submit" class="btn btn-sm btn-outline-success" title="Обновить статическую страницу">
+                <i class="bi bi-arrow-repeat"></i>
+              </button>
+            </form>
             <a href="/admin/services/{{ service.slug }}/edit" class="btn btn-sm btn-outline-secondary">
               <i class="bi bi-pencil"></i>
             </a>

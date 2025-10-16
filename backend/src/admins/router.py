@@ -13,7 +13,7 @@ from pathlib import Path
 from database import AsyncSessions, get_db
 from src.auth.models import User
 from src.girls.models import Girls, Service, ModelPhoto
-from src.utils.tools import process_photo, get_current_superuser, verify_password, create_access_token
+from src.utils.tools import process_photo, get_current_superuser, verify_password, create_access_token, trigger_revalidate
 from slugify import slugify
 
 from src.managements.models import Sites
@@ -73,7 +73,12 @@ async def create_model_view(request: Request, db: AsyncSessions = Depends(get_db
 @router.get("/models/{slug}/edit", response_class=HTMLResponse)
 async def edit_model_view(slug: str, request: Request, db: AsyncSessions = Depends(get_db),
                           _: str = Depends(get_current_superuser)):
-    result = await db.execute(select(Girls).options(selectinload(Girls.photos)).where(Girls.slug == slug))
+    result = await db.execute(
+        select(Girls)
+        .options(selectinload(Girls.photos))
+        .options(selectinload(Girls.services))
+        .where(Girls.slug == slug)
+    )
     girl = result.scalar_one_or_none()
     if not girl:
         raise HTTPException(status_code=404, detail="Model not found")
@@ -111,10 +116,17 @@ async def edit_model_post(
         db: AsyncSessions = Depends(get_db),
         _: str = Depends(get_current_superuser)
 ):
-    result = await db.execute(select(Girls).options(selectinload(Girls.photos)).where(Girls.slug == slug))
+    result = await db.execute(
+        select(Girls)
+        .options(selectinload(Girls.photos))
+        .options(selectinload(Girls.services))
+        .where(Girls.slug == slug)
+    )
     girl = result.scalar_one_or_none()
     if not girl:
         raise HTTPException(status_code=404, detail="Model not found")
+
+    old_service_slugs = [s.slug for s in (girl.services or [])]
 
     # обновление всех текстовых и числовых полей
     girl.name = name
@@ -150,12 +162,26 @@ async def edit_model_post(
     await db.commit()
     await db.refresh(girl)
 
+    # Trigger revalidation for affected service pages (old and new)
+    try:
+        new_service_slugs = [s.slug for s in (girl.services or [])]
+        all_impacted = list(set(old_service_slugs + new_service_slugs))
+        if all_impacted:
+            asyncio.create_task(trigger_revalidate(service_slugs=all_impacted))
+    except Exception:
+        # Do not block admin flow on revalidation failure
+        pass
+
     return RedirectResponse(url="/admin/models", status_code=303)
 
 
 @router.post("/models/{slug}/delete")
 async def delete_model(slug: str, db: AsyncSessions = Depends(get_db), _: str = Depends(get_current_superuser)):
-    result = await db.execute(select(Girls).where(Girls.slug == slug))
+    result = await db.execute(
+        select(Girls)
+        .options(selectinload(Girls.services))
+        .where(Girls.slug == slug)
+    )
     girl = result.scalar_one_or_none()
 
     if not girl:
@@ -163,6 +189,12 @@ async def delete_model(slug: str, db: AsyncSessions = Depends(get_db), _: str = 
 
     await db.delete(girl)
     await db.commit()
+    try:
+        impacted = [s.slug for s in (girl.services or [])]
+        if impacted:
+            asyncio.create_task(trigger_revalidate(service_slugs=impacted))
+    except Exception:
+        pass
     return RedirectResponse(url="/admin/models", status_code=303)
 
 
@@ -177,6 +209,26 @@ async def admin_services_view(request: Request, db: AsyncSessions = Depends(get_
         "services": services,
         "current_year": datetime.now().year
     })
+
+@router.post("/services/{slug}/revalidate")
+async def admin_revalidate_service(slug: str, _: str = Depends(get_current_superuser)):
+    try:
+        asyncio.create_task(trigger_revalidate(service_slug=slug))
+    except Exception:
+        pass
+    return RedirectResponse(url="/admin/services", status_code=303)
+
+@router.post("/services/revalidate-all")
+async def admin_revalidate_all_services(db: AsyncSessions = Depends(get_db), _: str = Depends(get_current_superuser)):
+    result = await db.execute(select(Service))
+    services = result.scalars().all()
+    slugs = [s.slug for s in services if s.slug]
+    try:
+        if slugs:
+            asyncio.create_task(trigger_revalidate(service_slugs=slugs))
+    except Exception:
+        pass
+    return RedirectResponse(url="/admin/services", status_code=303)
 
 
 @router.get("/services/new", response_class=HTMLResponse)

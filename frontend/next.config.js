@@ -19,10 +19,11 @@ const nextConfig = {
   async rewrites() {
     const destBase = process.env.API_INTERNAL_URL || 'http://backend:8000/api';
     return [
-      {
-        source: '/api/:path*',
-        destination: `${destBase}/:path*`,
-      },
+      // Proxy only backend API namespaces; leave /api/revalidate to Next.js
+      { source: '/api/girls/:path*', destination: `${destBase}/girls/:path*` },
+      { source: '/api/services/:path*', destination: `${destBase}/services/:path*` },
+      { source: '/api/sites/:path*', destination: `${destBase}/sites/:path*` },
+      { source: '/api/users/:path*', destination: `${destBase}/users/:path*` },
     ];
   },
 };
