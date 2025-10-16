@@ -1,0 +1,418 @@
+{% extends "base.html" %}
+{% block title %}Добавить модель{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/admin" class="text-decoration-none">
+                        <i class="bi bi-house"></i> Главная
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="/admin/models" class="text-decoration-none">Модели</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Добавить</li>
+            </ol>
+        </nav>
+
+        <h1 class="display-6 fw-bold text-dark mb-2">
+            <i class="bi bi-plus-circle text-success me-3"></i>
+            Добавить новую модель
+        </h1>
+        <p class="text-muted">Заполните форму для добавления новой модели в систему</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header border-0 py-4"
+                 style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white;">
+                <h4 class="card-title mb-0">
+                    <i class="bi bi-person-plus me-2"></i>
+                    Информация о новой модели
+                </h4>
+            </div>
+            <div class="card-body p-4">
+<form method="post" action="/api/girls/admin/create/" class="needs-validation" novalidate enctype="multipart/form-data">
+                    <div class="col-md-6">
+                        <div class="form-check mt-4">
+                            <input class="form-check-input" type="checkbox" id="verified" name="verified" value="true">
+                            <label class="form-check-label fw-semibold" for="verified">
+                                <i class="bi bi-shield-check me-2 text-success"></i>Верифицированная модель
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row g-4">
+                        <!-- Имя (RU) -->
+                        <div class="col-md-6">
+                            <label for="name" class="form-label fw-semibold">
+                                <i class="bi bi-person me-2 text-primary"></i>Имя <span class="text-danger">*</span>
+                            </label>
+                            <input type="text"
+                                   id="name"
+                                   name="name"
+                                   class="form-control form-control-lg rounded-3"
+                                   required
+                                   placeholder="Введите имя модели">
+                            <div class="invalid-feedback">
+                                Пожалуйста, введите имя модели.
+                            </div>
+                        </div>
+
+                        <!-- Имя (EN) -->
+                        <div class="col-md-6">
+                            <label for="name_en" class="form-label fw-semibold">
+                                <i class="bi bi-translate me-2 text-info"></i>Имя (EN) <span
+                                    class="text-danger">*</span>
+                            </label>
+                            <input type="text"
+                                   id="name_en"
+                                   name="name_en"
+                                   class="form-control form-control-lg rounded-3"
+                                   required
+                                   placeholder="Enter model name in English">
+                            <div class="invalid-feedback">
+                                Пожалуйста, введите имя модели на английском.
+                            </div>
+                        </div>
+
+                        <!-- Выбор города (RU) -->
+                        <div class="col-md-6">
+                            <label for="city" class="form-label fw-semibold">
+                                <i class="bi bi-geo-alt me-2 text-success"></i>Город <span class="text-danger">*</span>
+                            </label>
+                            <select id="city" name="city" class="form-select form-select-lg rounded-3" required>
+                                <option value="">Выберите город</option>
+                                <option value="Москва">Москва</option>
+                                <option value="Питер">Питер</option>
+                                <option value="Дубай">Дубай</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Пожалуйста, выберите город.
+                            </div>
+                        </div>
+
+                        <!-- Город (EN) автозаполняется -->
+                        <div class="col-md-6">
+                            <label for="city_en" class="form-label fw-semibold">
+                                <i class="bi bi-translate me-2 text-info"></i>Город (EN) <span
+                                    class="text-danger">*</span>
+                            </label>
+                            <input type="text"
+                                   id="city_en"
+                                   name="city_en"
+                                   class="form-control form-control-lg rounded-3"
+                                   readonly
+                                   required
+                                   placeholder="City in English">
+                            <div class="invalid-feedback">
+                                Пожалуйста, введите город на английском.
+                            </div>
+                        </div>
+
+                        <!-- Возраст -->
+                        <div class="col-md-6">
+                            <label for="age" class="form-label fw-semibold">
+                                <i class="bi bi-calendar me-2 text-info"></i>Возраст <span class="text-danger">*</span>
+                            </label>
+                            <input type="number"
+                                   id="age"
+                                   name="age"
+                                   class="form-control form-control-lg rounded-3"
+                                   required
+                                   min="18"
+                                   max="50"
+                                   placeholder="Введите возраст">
+                            <div class="invalid-feedback">
+                                Пожалуйста, введите корректный возраст (18-50 лет).
+                            </div>
+                        </div>
+
+                        <!-- Цена за час -->
+                        <div class="col-md-6">
+                            <label for="price_per_hour" class="form-label fw-semibold">
+                                <i class="bi bi-currency-exchange me-2 text-warning"></i>Цена за час <span
+                                    class="text-danger">*</span>
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <input type="number"
+                                       id="price_per_hour"
+                                       name="price_per_hour"
+                                       class="form-control rounded-start-3"
+                                       required
+                                       min="500"
+                                       step="100"
+                                       placeholder="Введите цену">
+                                <span class="input-group-text rounded-end-3 bg-light">AED</span>
+                                <div class="invalid-feedback">
+                                    Пожалуйста, введите корректную цену.
+                                </div>
+                            </div>
+                            <div class="form-text">Минимальная цена: 1000 AED</div>
+                        </div>
+
+                        <!-- Категория -->
+                        <div class="col-md-6">
+                            <label for="role" class="form-label fw-semibold">
+                                <i class="bi bi-star me-2 text-warning"></i>Категория
+                            </label>
+                            <select id="role" name="role" class="form-select form-select-lg rounded-3">
+                                <option value="">Выберите категорию</option>
+                                <option value="new">New</option>
+                                <option value="elit">Elit</option>
+                                <option value="indi">Indi</option>
+                            </select>
+                        </div>
+
+                        <!-- Рост -->
+                        <div class="col-md-4">
+                            <label for="height" class="form-label fw-semibold">
+                                <i class="bi bi-arrows-vertical me-2 text-info"></i>Рост (см)
+                            </label>
+                            <input type="number"
+                                   id="height"
+                                   name="height"
+                                   class="form-control form-control-lg rounded-3"
+                                   value="170"
+                                   min="150"
+                                   max="200"
+                                   placeholder="170">
+                        </div>
+
+                        <!-- Вес -->
+                        <div class="col-md-4">
+                            <label for="weight" class="form-label fw-semibold">
+                                <i class="bi bi-speedometer me-2 text-primary"></i>Вес (кг)
+                            </label>
+                            <input type="number"
+                                   id="weight"
+                                   name="weight"
+                                   class="form-control form-control-lg rounded-3"
+                                   value="50"
+                                   min="40"
+                                   max="100"
+                                   placeholder="50">
+                        </div>
+
+                        <!-- Размер груди -->
+                        <div class="col-md-4">
+                            <label for="boobs" class="form-label fw-semibold">
+                                <i class="bi bi-circle me-2 text-secondary"></i>Размер груди
+                            </label>
+                            <select id="boobs" name="boobs" class="form-select form-select-lg rounded-3">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                            </select>
+                        </div>
+
+                        <!-- Цена за 4 часа -->
+                        <div class="col-md-6">
+                            <label for="price_per_4" class="form-label fw-semibold">
+                                <i class="bi bi-clock me-2 text-info"></i>Цена за 4 часа
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <input type="number"
+                                       id="price_per_4"
+                                       name="price_per_4"
+                                       class="form-control rounded-start-3"
+                                       min="0"
+                                       step="500"
+                                       placeholder="Оставьте пустым для автоматического расчета">
+                                <span class="input-group-text rounded-end-3 bg-light">AED</span>
+                            </div>
+                            <div class="form-text">Если не указано, будет рассчитано автоматически</div>
+                        </div>
+
+                        <!-- Цена за ночь -->
+                        <div class="col-md-6">
+                            <label for="price_per_night" class="form-label fw-semibold">
+                                <i class="bi bi-moon me-2 text-warning"></i>Цена за ночь
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <input type="number"
+                                       id="price_per_night"
+                                       name="price_per_night"
+                                       class="form-control rounded-start-3"
+                                       min="0"
+                                       step="1000"
+                                       placeholder="Оставьте пустым для автоматического расчета">
+                                <span class="input-group-text rounded-end-3 bg-light">AED</span>
+                            </div>
+                            <div class="form-text">Если не указано, будет рассчитано автоматически</div>
+                        </div>
+
+                        <!-- Фотографии -->
+                        <div class="col-md-6">
+                            <label for="photos" class="form-label fw-semibold">
+                                <i class="bi bi-images me-2 text-primary"></i>Фотографии
+                            </label>
+                            <input type="file"
+                                   id="photos"
+                                   name="photos"
+                                   class="form-control form-control-lg rounded-3"
+                                   multiple
+                                   accept="image/*">
+                            <div class="form-text">Можно выбрать несколько фотографий</div>
+
+                            <!-- Контейнер для превью -->
+                            <div id="preview" class="mt-3 d-flex gap-2 flex-wrap"></div>
+                        </div>
+
+                        <!-- Описание (RU) -->
+                        <div class="col-12">
+                            <label for="description" class="form-label fw-semibold">
+                                <i class="bi bi-card-text me-2 text-secondary"></i>Описание
+                            </label>
+                            <textarea id="description"
+                                      name="description"
+                                      class="form-control rounded-3"
+                                      rows="4"
+                                      placeholder="Введите описание модели (необязательно)"></textarea>
+                        </div>
+
+                        <!-- Описание (EN) -->
+                        <div class="col-12">
+                            <label for="description_en" class="form-label fw-semibold">
+                                <i class="bi bi-translate me-2 text-info"></i>Описание (EN)
+                            </label>
+                            <textarea id="description_en"
+                                      name="description_en"
+                                      class="form-control rounded-3"
+                                      rows="4"
+                                      placeholder="Enter description in English (optional)"></textarea>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="alert alert-success border-0 rounded-3"
+                                 style="background: rgba(25, 135, 84, 0.1);">
+                                <i class="bi bi-lightbulb-fill me-2"></i>
+                                <strong>Совет:</strong> Добавьте качественные фотографии и подробное описание для
+                                лучшего результата.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-semibold mb-2">
+                            <i class="bi bi-gear-fill me-2 text-primary"></i>Сервисы
+                        </label>
+
+                        <div class="d-flex flex-wrap gap-3">
+                            {% for service in services %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="service_ids"
+                                       id="service-{{ service.id }}" value="{{ service.id }}">
+                                <label class="form-check-label" for="service-{{ service.id }}">
+                                    {{ service.name }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-text mt-2">Выберите один или несколько сервисов</div>
+                    </div>
+
+
+                    <div class="d-flex gap-3 mt-5">
+                        <button type="submit" class="btn btn-success btn-lg rounded-pill px-4">
+                            <i class="bi bi-plus-circle me-2"></i>Добавить модель
+                        </button>
+                        <a href="/admin/models" class="btn btn-outline-secondary btn-lg rounded-pill px-4">
+                            <i class="bi bi-arrow-left me-2"></i>Отмена
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Bootstrap form validation
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            var forms = document.querySelectorAll('.needs-validation');
+            Array.prototype.slice.call(forms).forEach(function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+
+    // Автоперевод имени и города
+    const cityMap = {
+        'Москва': 'Moscow',
+        'Питер': 'Saint Petersburg',
+        'Дубай': 'Dubai'
+    };
+
+    const nameInput = document.getElementById('name');
+    const nameEnInput = document.getElementById('name_en');
+    const citySelect = document.getElementById('city');
+    const cityEnInput = document.getElementById('city_en');
+
+    nameInput.addEventListener('input', () => {
+        // Простая замена кириллицы на латиницу (транслитерация примитивная)
+        const translitMap = {
+            'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo', 'ж': 'zh', 'з': 'z',
+            'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o', 'п': 'p', 'р': 'r',
+            'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'kh', 'ц': 'ts', 'ч': 'ch', 'ш': 'sh', 'щ': 'shch',
+            'ы': 'y', 'э': 'e', 'ю': 'yu', 'я': 'ya', 'ь': '', 'ъ': ''
+        };
+        let value = nameInput.value.toLowerCase();
+        let result = '';
+        for (let ch of value) {
+            if (translitMap[ch]) {
+                result += translitMap[ch];
+            } else {
+                result += ch;
+            }
+        }
+        // Заглавная первая буква
+        result = result.charAt(0).toUpperCase() + result.slice(1);
+        nameEnInput.value = result;
+    });
+
+    citySelect.addEventListener('change', () => {
+        const selectedCity = citySelect.value;
+        console.log('Выбран город:', selectedCity);
+        console.log('Перевод города:', cityMap[selectedCity]);
+        cityEnInput.value = cityMap[selectedCity] || '';
+    });
+        document.getElementById('photos').addEventListener('change', function(event) {
+        const preview = document.getElementById('preview');
+        preview.innerHTML = ''; // Очистить предыдущее превью
+
+        const files = event.target.files;
+        if (files) {
+            Array.from(files).forEach(file => {
+                if (!file.type.startsWith('image/')) return; // только картинки
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.maxWidth = '150px';
+                    img.style.borderRadius = '8px';
+                    img.style.boxShadow = '0 0 5px rgba(0,0,0,0.2)';
+                    preview.appendChild(img);
+                }
+                reader.readAsDataURL(file);
+            });
+        }
+    });
+</script>
+{% endblock %}

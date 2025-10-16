@@ -1,0 +1,173 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  font-family: 'Roboto Mono', sans-serif;
+  transition: background-color 0.3s ease;
+}
+
+.left {
+  flex: 0 0 auto;
+}
+
+.logo {
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: #1f1f1f;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.logo:hover {
+  color: #111;
+}
+
+.nav {
+  display: flex;
+  gap: 40px;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+.navGroup {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.link {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #2a2a2a;
+  text-decoration: none;
+  position: relative;
+  padding: 4px 0;
+  transition: color 0.2s ease;
+}
+
+.link::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 2px;
+  background: #111;
+  transition: width 0.25s ease;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.link:hover {
+  color: #000;
+}
+
+.link:hover::after {
+  width: 100%;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 0 0 auto;
+}
+
+.icon {
+  font-size: 26px;
+  color: #333;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.right a .icon:hover {
+  color: #000;
+  transform: scale(1.1);
+}
+
+.langSwitcher {
+  display: flex;
+  gap: 10px;
+}
+
+.langBtn {
+  background: none;
+  border: none;
+  padding: 4px 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.langBtn:hover {
+  background-color: #f0f0f0;
+  color: #000;
+}
+
+/* Бургер */
+.burger {
+  display: none;
+  font-size: 28px;
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.burger:hover {
+  color: #000;
+}
+
+/* Мобильные стили */
+@media (max-width: 768px) {
+  .nav {
+    display: none;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: #fff;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px 24px;
+    border-bottom: 1px solid #eee;
+    z-index: 99;
+  }
+
+  .navGroup {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .nav.navOpen {
+    display: flex;
+  }
+
+  .right {
+    max-width: 100%;
+    overflow-x: auto;
+    gap: 8px;
+  }
+
+  .langSwitcher {
+    white-space: nowrap;
+  }
+
+  .burger {
+    display: block;
+  }
+
+  .logo {
+    font-size: 1.25rem;
+  }
+}

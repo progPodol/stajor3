@@ -1,0 +1,142 @@
+{
+  "header": {
+    "navigation.allModels": "All Models",
+    "navigation.eliteModels": "Elite Models",
+    "navigation.newModels": "New Models",
+    "navigation.indiModels": "Independent",
+    "navigation.escortWork": "Work",
+    "navigation.contacts": "Contacts",
+    "navigation.about": "About Us"
+  },
+  "rabota": {
+    "title": "Work in Escort Agency — Join Us",
+    "description": "Looking for a prestigious job with high income? Join our escort agency. We guarantee safety and confidentiality.",
+    "joinUs": "Join Our Team",
+    "joinUsText": "We are always looking for beautiful, intelligent, and ambitious women to join our agency. We offer prestige, great income, and full confidentiality.",
+    "requirements": "Requirements",
+    "requirement1": "Age 18–35",
+    "requirement2": "Attractive and well-groomed appearance",
+    "requirement3": "Good communication skills and intelligence",
+    "requirement4": "Responsibility and punctuality",
+    "requirement5": "Willingness to work flexible hours",
+    "benefits": "Benefits",
+    "benefit1": "High and stable income",
+    "benefit2": "Flexible schedule",
+    "benefit3": "Full confidentiality and safety",
+    "benefit4": "Professional support and training",
+    "benefit5": "Opportunity to work with VIP clients",
+    "howToApply": "How to Apply",
+    "howToApplyText": "For more details and to apply, contact us using your preferred method. All conversations are strictly confidential.",
+    "contactTelegram": "Message on Telegram",
+    "contactWhatsApp": "Message on WhatsApp"
+  },
+  "about": {
+    "title": "About Us",
+    "description": "Learn more about our company, mission, and values.",
+    "whoWeAre": "Who We Are",
+    "whoWeAreText": "We are a professional team providing premium escort services. Our ladies combine elegance, intelligence, and a passion for the finer things, making every encounter truly special.",
+    "ourMission": "Our Mission",
+    "ourMissionText": "Our goal is to create a comfortable, safe, and exclusive atmosphere for every client, ensuring the highest level of service and complete confidentiality.",
+    "whyChooseUs": "Why Choose Us",
+    "reason1": "Only verified and professional models.",
+    "reason2": "Complete anonymity and protection of clients’ personal data.",
+    "reason3": "A personalized approach to every request.",
+    "reason4": "Available 24/7 — always in touch."
+  },
+  "contact": {
+    "title": "Contacts - Get in Touch",
+    "description": "Contact our escort agency. We are available 24/7 and guarantee full confidentiality.",
+    "getInTouch": "Get in Touch",
+    "getInTouchText": "We are always ready to answer your questions and help you choose the right companion. Our managers work 24/7.",
+    "contactMethods": "Contact Methods",
+    "telegramDescription": "Fast and secure communication via messenger. Instant replies.",
+    "whatsappDescription": "Convenient chat with photo and voice message options.",
+    "workingHours": "Working Hours",
+    "available": "Available",
+    "availableTime": "24/7 - around the clock",
+    "responseTime": "Response Time",
+    "responseTimeText": "Within 5–15 minutes anytime",
+    "privacy": "Privacy",
+    "privacyText": "We guarantee full confidentiality of all messages:",
+    "privacyPoint1": "All conversations are strictly confidential",
+    "privacyPoint2": "No personal data shared with third parties",
+    "privacyPoint3": "Encrypted communication channels used"
+  },
+  "homepage": {
+    "title": "Best Escort Models in Dubai — Verified Profiles, Photos, Prices",
+    "description": "Intimacy in Dubai — up-to-date profiles with photos, prices, reviews, and services. Premium leisure 24/7.",
+    "loadMore": "Show All Models",
+    "loading": "Loading...",
+    "noMoreModels": "No more models",
+    "modelDescriptionDefaults": {
+      "place": "not specified",
+      "boobs": "not specified",
+      "price": "on request"
+    }
+  },
+  "modelGrid": {
+    "price_per_hour": "Price per hour:",
+    "model_name": "{{model.name}}"
+  },
+  "escortService": "Escort service",
+  "inMoscow": "in Dubai",
+  "modelsOfferingService": "Models offering the service \"{{serviceName}}\" {{city}} — real photos, prices and detailed profiles for your choice.",
+  "discoverBestModels": "Discover the best models specializing in the service \"{{serviceName}}\". Verified profiles and up-to-date prices.",
+  "serviceWideChoice": "The service \"{{serviceName}}\" {{city}}: a wide selection of models with individual offers, photos, and reviews.",
+  "newModels": {
+    "title": "New Escort Models in Dubai — Fresh Profiles and Unique Offers",
+    "description": "Discover the new faces of Dubai — fresh escort model profiles with real photos, up-to-date prices, and detailed service descriptions. The perfect choice for those seeking something new and exclusive."
+  },
+  "indiModels": {
+    "title": "Indie Models in Dubai — Exclusive Profiles with a Personal Approach",
+    "description": "The best indie models in Dubai — verified profiles with real photos, personalized service, and transparent pricing. An ideal choice for private and comfortable meetings."
+  },
+  "elitModels": {
+    "title": "Elite Models in Dubai — Exclusive High-Class Escort",
+    "description": "Top elite models in Dubai with verified profiles, photos, and a personalized approach. Premium services for discerning clients."
+  },
+  "layout": {
+    "escortServices": "Escort Services",
+    "servicesLoading": "Loading services...",
+    "servicesError": "Error loading services: {{error}}",
+    "servicesNotFound": "No services found",
+    "footer": {
+      "navigation": "Navigation",
+      "home": "Home",
+      "about": "About Us",
+      "rabota": "Working with us",
+      "services": "Services",
+      "contacts": "Contacts",
+      "contactsTitle": "Contact Info",
+      "phone": "Phone",
+      "socialMedia": "Social Media",
+      "telegram": "Telegram",
+      "whatsapp": "WhatsApp",
+      "writeMessage": "Write",
+      "copyright": "© {{year}} Website. All rights reserved."
+    }
+  },
+  "modelPage": {
+    "back": "Back",
+    "prices": "Prices",
+    "model": "model",
+    "price": "from {{price}}AED per hour",
+    "seo": "Escort model profile - {{name}} with services: {{services}}",
+    "autoDescriptionStart": "The best girls' profiles are on our website. {{name}}",
+    "autoDescriptionCity": " from {{city}}",
+    "autoDescriptionPrice": ", price from {{price}}AED per hour",
+    "autoDescriptionServices": ". Services — {{services}}",
+    "pricePerHour": "Price per hour",
+    "pricePer4Hours": "Price for 4 hours",
+    "pricePerNight": "Price per night",
+    "city": "City",
+    "age": "Age",
+    "height": "Height",
+    "weight": "Weight",
+    "boobs": "breast size",
+    "description": "Profile",
+    "services": "Services",
+    "otherModels": "Other Models",
+    "description2": "About Me"
+  }
+}

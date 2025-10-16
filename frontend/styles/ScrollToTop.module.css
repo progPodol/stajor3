@@ -1,0 +1,47 @@
+.scrollToTopWrapper {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 9999;
+}
+
+.scrollToTopButton {
+  height: 3rem;
+  width: 3rem;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #2563eb 0%, #4f46e5 100%);
+  box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.5);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow 0.3s ease;
+}
+
+.scrollToTopButton:hover {
+  box-shadow: 0 10px 15px -3px rgba(96, 165, 250, 0.7);
+}
+@media (max-width: 768px) {
+  .scrollToTopWrapper {
+    bottom: 2rem;
+  }
+}
+
+.scrollToTopButton {
+  height: 3rem;
+  width: 3rem;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #2563eb 0%, #4f46e5 100%);
+  box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.5);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow 0.3s ease;
+}
+
+.scrollToTopButton:hover {
+  box-shadow: 0 10px 15px -3px rgba(96, 165, 250, 0.7);
+}

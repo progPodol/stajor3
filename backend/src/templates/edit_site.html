@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Редактировать сайт{% endblock %}
+
+{% block content %}
+<h2>Редактировать сайт: {{ site.site_name }}</h2>
+<form action="/admin/sites/edit/{{ site.id }}" method="post" class="row g-3">
+    <div class="col-md-6">
+        <label class="form-label">Название сайта</label>
+        <input type="text" name="site_name" value="{{ site.site_name }}" class="form-control" required>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">URL</label>
+        <input type="text" name="url" value="{{ site.url }}" class="form-control">
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Telegram</label>
+        <input type="text" name="telegram" value="{{ site.telegram }}" class="form-control">
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">WhatsApp</label>
+        <input type="text" name="whatsapp" value="{{ site.whatsapp }}" class="form-control">
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Изображение (URL)</label>
+        <input type="text" name="image" value="{{ site.image }}" class="form-control">
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Тип</label>
+        <input type="text" name="type" value="{{ site.type }}" class="form-control">
+    </div>
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-save"></i> Сохранить
+        </button>
+        <a href="/admin/sites" class="btn btn-secondary">Отмена</a>
+    </div>
+</form>
+{% endblock %}

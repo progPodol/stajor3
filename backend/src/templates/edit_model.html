@@ -1,0 +1,308 @@
+{% extends "base.html" %}
+{% block title %}Редактировать модель{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/admin" class="text-decoration-none">
+                        <i class="bi bi-house"></i> Главная
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="/admin/models" class="text-decoration-none">Модели</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Редактировать</li>
+            </ol>
+        </nav>
+
+        <h1 class="display-6 fw-bold text-dark mb-2">
+            <i class="bi bi-pencil-square text-warning me-3"></i>
+            Редактировать модель
+        </h1>
+        <p class="text-muted">Изменение данных: <strong>{{ girl.name }}</strong></p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header border-0 py-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                <h4 class="card-title mb-0">
+                    <i class="bi bi-person-gear me-2"></i>
+                    Информация о модели
+                </h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <div class="row g-4">
+                        <!-- Имя -->
+                        <div class="col-md-6">
+                            <label for="name" class="form-label fw-semibold">
+                                <i class="bi bi-person me-2 text-primary"></i>Имя
+                            </label>
+                            <input type="text" id="name" name="name" class="form-control form-control-lg rounded-3"
+                                   value="{{ girl.name }}" required placeholder="Введите имя модели">
+                            <div class="invalid-feedback">Пожалуйста, введите имя модели.</div>
+                        </div>
+
+                        <!-- Имя (EN) -->
+                        <div class="col-md-6">
+                            <label for="name_en" class="form-label fw-semibold">
+                                <i class="bi bi-person me-2 text-primary"></i>Имя (EN)
+                            </label>
+                            <input type="text" id="name_en" name="name_en" class="form-control form-control-lg rounded-3"
+                                   value="{{ girl.name_en }}" required placeholder="Введите имя модели (англ)">
+                            <div class="invalid-feedback">Пожалуйста, введите имя модели на английском.</div>
+                        </div>
+
+                        <!-- Город -->
+                        <div class="col-md-6">
+                            <label for="city" class="form-label fw-semibold">
+                                <i class="bi bi-geo-alt me-2 text-success"></i>Город
+                            </label>
+                            <input type="text" id="city" name="city" class="form-control form-control-lg rounded-3"
+                                   value="{{ girl.city }}" required placeholder="Введите город">
+                            <div class="invalid-feedback">Пожалуйста, введите город.</div>
+                        </div>
+
+                        <!-- Город (EN) -->
+                        <div class="col-md-6">
+                            <label for="city_en" class="form-label fw-semibold">
+                                <i class="bi bi-geo-alt me-2 text-success"></i>Город (EN)
+                            </label>
+                            <input type="text" id="city_en" name="city_en" class="form-control form-control-lg rounded-3"
+                                   value="{{ girl.city_en }}" required placeholder="Введите город (англ)">
+                            <div class="invalid-feedback">Пожалуйста, введите город на английском.</div>
+                        </div>
+
+                        <!-- Возраст -->
+                        <div class="col-md-6">
+                            <label for="age" class="form-label fw-semibold">
+                                <i class="bi bi-calendar me-2 text-info"></i>Возраст
+                            </label>
+                            <input type="number" id="age" name="age" class="form-control form-control-lg rounded-3"
+                                   value="{{ girl.age }}" required min="18" max="50" placeholder="Введите возраст">
+                            <div class="invalid-feedback">Пожалуйста, введите корректный возраст (18-50 лет).</div>
+                        </div>
+
+                        <!-- Рост -->
+                        <div class="col-md-6">
+                            <label for="height" class="form-label fw-semibold">
+                                <i class="bi bi-arrows-expand me-2 text-secondary"></i>Рост (см)
+                            </label>
+                            <input type="number" id="height" name="height" class="form-control form-control-lg rounded-3"
+                                   value="{{ girl.height }}" min="140" max="210" placeholder="Рост">
+                        </div>
+
+                        <!-- Вес -->
+                        <div class="col-md-6">
+                            <label for="weight" class="form-label fw-semibold">
+                                <i class="bi bi-bounding-box me-2 text-secondary"></i>Вес (кг)
+                            </label>
+                            <input type="number" id="weight" name="weight" class="form-control form-control-lg rounded-3"
+                                   value="{{ girl.weight }}" min="30" max="150" placeholder="Вес">
+                        </div>
+
+                        <!-- Размер груди -->
+                        <div class="col-md-6">
+                            <label for="boobs" class="form-label fw-semibold">
+                                <i class="bi bi-heart me-2 text-danger"></i>Размер груди
+                            </label>
+                            <input type="number" id="boobs" name="boobs" class="form-control form-control-lg rounded-3"
+                                   value="{{ girl.boobs }}" min="1" max="5" placeholder="Размер груди (1-5)">
+                        </div>
+
+                        <!-- Цена за час -->
+                        <div class="col-md-6">
+                            <label for="price_per_hour" class="form-label fw-semibold">
+                                <i class="bi bi-currency-exchange me-2 text-warning"></i>Цена за час
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <input type="number" id="price_per_hour" name="price_per_hour" class="form-control rounded-start-3"
+                                       value="{{ girl.price_per_hour }}" required min="300" step="100" placeholder="Введите цену">
+                                <span class="input-group-text rounded-end-3 bg-light">AED</span>
+                                <div class="invalid-feedback">Пожалуйста, введите корректную цену.</div>
+                            </div>
+                            <div class="form-text">Минимальная цена: 1000 AED</div>
+                        </div>
+
+                        <!-- Цена за 4 часа -->
+                        <div class="col-md-6">
+                            <label for="price_per_4" class="form-label fw-semibold">
+                                <i class="bi bi-clock-history me-2 text-warning"></i>Цена за 4 часа
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <input type="number" id="price_per_4" name="price_per_4" class="form-control rounded-start-3"
+                                       value="{{ girl.price_per_4 }}" min="0" step="100" placeholder="Введите цену (0 = авто)">
+                                <span class="input-group-text rounded-end-3 bg-light">AED</span>
+                            </div>
+                            <div class="form-text">Если 0 — считается как цена за час × 4</div>
+                        </div>
+
+                        <!-- Цена за ночь -->
+                        <div class="col-md-6">
+                            <label for="price_per_night" class="form-label fw-semibold">
+                                <i class="bi bi-moon-stars me-2 text-warning"></i>Цена за ночь
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <input type="number" id="price_per_night" name="price_per_night" class="form-control rounded-start-3"
+                                       value="{{ girl.price_per_night }}" min="0" step="100" placeholder="Введите цену (0 = авто)">
+                                <span class="input-group-text rounded-end-3 bg-light">AED</span>
+                            </div>
+                            <div class="form-text">Если 0 — считается как цена за час × 10</div>
+                        </div>
+
+                        <!-- Роли -->
+                        <div class="col-12">
+                            <label class="form-label fw-semibold mb-2">
+                                <i class="bi bi-stars me-2 text-warning"></i>Роли
+                            </label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="role_elit" name="elit" value="true"
+                                    {% if girl.elit %}checked{% endif %}>
+                                <label class="form-check-label" for="role_elit">Элит</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="role_new" name="new" value="true"
+                                    {% if girl.new %}checked{% endif %}>
+                                <label class="form-check-label" for="role_new">Новая</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="role_indi" name="indi" value="true"
+                                    {% if girl.indi %}checked{% endif %}>
+                                <label class="form-check-label" for="role_indi">Индивидуалка</label>
+                            </div>
+                        </div>
+
+                        <!-- Verified -->
+                        <div class="col-12">
+                            <div class="form-check mt-3">
+                                <input class="form-check-input" type="checkbox" id="verified" name="verified" value="true"
+                                    {% if girl.verified %}checked{% endif %}>
+                                <label class="form-check-label fw-semibold" for="verified">
+                                    <i class="bi bi-patch-check-fill text-info me-2"></i>Проверена
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Описание -->
+                        <div class="col-md-6">
+                            <label for="description" class="form-label fw-semibold">
+                                <i class="bi bi-card-text me-2 text-secondary"></i>Описание (RU)
+                            </label>
+                            <textarea id="description" name="description" class="form-control form-control-lg rounded-3" rows="4"
+                                placeholder="Описание модели">{{ girl.description }}</textarea>
+                        </div>
+
+                        <!-- Описание (EN) -->
+                        <div class="col-md-6">
+                            <label for="description_en" class="form-label fw-semibold">
+                                <i class="bi bi-card-text me-2 text-secondary"></i>Описание (EN)
+                            </label>
+                            <textarea id="description_en" name="description_en" class="form-control form-control-lg rounded-3" rows="4"
+                                placeholder="Model description">{{ girl.description_en }}</textarea>
+                        </div>
+
+                        <!-- Услуги (чекбоксы) -->
+                        <div class="col-12">
+                            <label class="form-label fw-semibold mb-2">
+                                <i class="bi bi-gear me-2 text-secondary"></i>Услуги
+                            </label>
+                            <div class="d-flex flex-wrap gap-3">
+                                {% for service in all_services %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="service_{{ service.id }}" name="service_ids" value="{{ service.id }}"
+                                        {% if service.id in girl.services|map(attribute='id')|list %}checked{% endif %}>
+                                    <label class="form-check-label" for="service_{{ service.id }}">
+                                        {{ service.name }}
+                                    </label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Фотографии -->
+                        <div class="col-12">
+                            <label for="photos" class="form-label fw-semibold">
+                                <i class="bi bi-images me-2 text-primary"></i>Загрузить новые фотографии
+                            </label>
+                            <input type="file" id="photos" name="photos" class="form-control form-control-lg rounded-3"
+                                   multiple accept="image/*">
+                            <div class="form-text">Можно выбрать несколько фотографий. Новые заменят старые.</div>
+                            <div id="preview" class="mt-3 d-flex gap-2 flex-wrap"></div>
+
+                            <!-- Показать текущие фото -->
+                            {% if girl.photos %}
+                            <div class="mt-3">
+                                <p>Текущие фотографии:</p>
+                                <div class="d-flex gap-2 flex-wrap">
+                                    {% for photo in girl.photos %}
+                                    <img src="{{ photo.photo_url }}" alt="Фото модели" style="max-width: 150px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.2);">
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                    </div>
+
+                    <div class="d-flex gap-3 mt-5">
+                        <button type="submit" class="btn btn-primary btn-lg rounded-pill px-4">
+                            <i class="bi bi-check-circle me-2"></i>Сохранить изменения
+                        </button>
+                        <a href="/admin/models" class="btn btn-outline-secondary btn-lg rounded-pill px-4">
+                            <i class="bi bi-arrow-left me-2"></i>Назад к списку
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Bootstrap form validation
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+        var forms = document.getElementsByClassName('needs-validation');
+        Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
+
+// Превью для выбранных фотографий
+document.getElementById('photos').addEventListener('change', function(event) {
+    const preview = document.getElementById('preview');
+    preview.innerHTML = ''; // Очистить предыдущее превью
+
+    const files = event.target.files;
+    if (files) {
+        Array.from(files).forEach(file => {
+            if (!file.type.startsWith('image/')) return; // только картинки
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.maxWidth = '150px';
+                img.style.borderRadius = '8px';
+                img.style.boxShadow = '0 0 5px rgba(0,0,0,0.2)';
+                preview.appendChild(img);
+            }
+            reader.readAsDataURL(file);
+        });
+    }
+});
+</script>
+{% endblock %}

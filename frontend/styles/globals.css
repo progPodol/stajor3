@@ -1,0 +1,30 @@
+/* Общие стили для ссылок и кнопок */
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  display: inline-block;
+  text-decoration: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+/* Убираем фокус, если он не клавиатурный */
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Фокус для клавиатуры – можно стилизовать как хочешь */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #555;
+  outline-offset: 2px;
+}
+
+/* Разрешаем выделение текста в остальных местах */
+body {
+  user-select: text;
+}
