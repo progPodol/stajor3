@@ -93,7 +93,12 @@ async def trigger_revalidate(
 
     Returns JSON response from frontend, or raises HTTPException on network errors.
     """
+    # Send secret redundantly in both header and query to avoid proxy/header quirks
+    secret = settings.REVALIDATE_SECRET or ""
     url = f"{settings.FRONTEND_INTERNAL_URL}/api/revalidate"
+    if secret:
+        joiner = '&' if ('?' in url) else '?'
+        url = f"{url}{joiner}secret={secret}"
     payload: dict = {}
     if path:
         payload["path"] = path
@@ -106,7 +111,8 @@ async def trigger_revalidate(
 
     headers = {
         "Content-Type": "application/json",
-        "x-revalidate-secret": settings.REVALIDATE_SECRET or "",  # must match frontend
+        "x-revalidate-secret": secret,
+        "Authorization": f"Bearer {secret}" if secret else "",
     }
 
     try:
