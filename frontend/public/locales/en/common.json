@@ -68,6 +68,10 @@
     "loadMore": "Show All Models",
     "loading": "Loading...",
     "noMoreModels": "No more models",
+    "syncData": "Sync Data",
+    "syncing": "Syncing...",
+    "syncSuccess": "Data successfully updated",
+    "syncError": "Sync error",
     "modelDescriptionDefaults": {
       "place": "not specified",
       "boobs": "not specified",

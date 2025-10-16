@@ -15,6 +15,10 @@
     "loadMore": "Показать всех моделей",
     "loading": "Загрузка...",
     "noMoreModels": "Больше моделей нет",
+    "syncData": "Синхронизировать данные",
+    "syncing": "Синхронизация...",
+    "syncSuccess": "Данные успешно обновлены",
+    "syncError": "Ошибка синхронизации",
     "modelDescriptionDefaults": {
       "place": "не указан",
       "boobs": "не указан",
