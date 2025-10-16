@@ -304,4 +304,13 @@ async def edit_site_form(
     db.add(site)
     await db.commit()
     await db.refresh(site)
+    # Revalidate all service pages as site-wide contact/branding may change
+    try:
+        result_all = await db.execute(select(Service))
+        services_all = result_all.scalars().all()
+        slugs = [s.slug for s in services_all if s.slug]
+        if slugs:
+            asyncio.create_task(trigger_revalidate(service_slugs=slugs))
+    except Exception:
+        pass
     return RedirectResponse(url="/admin/sites", status_code=303)
