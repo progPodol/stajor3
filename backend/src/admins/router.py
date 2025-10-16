@@ -151,7 +151,7 @@ async def edit_model_post(
         girl.services = result_services.scalars().all()
 
     # замена фото на новые
-    if photos and photos[0].filename:
+    if photos and photos[0] and getattr(photos[0], 'filename', None):
         # удаляем старые фото
         girl.photos.clear()
         # загружаем новые

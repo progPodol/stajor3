@@ -30,13 +30,24 @@ async def upload_image_to_imgbb(image_bytes: bytes) -> str:
     encoded_image = base64.b64encode(image_bytes).decode('utf-8')
     payload = {"key": IMGBB_API_KEY, "image": encoded_image}
 
-    async with httpx.AsyncClient() as client:
-        response = await client.post("https://api.imgbb.com/1/upload", data=payload)
+    last_error: Exception | None = None
+    for attempt in range(3):
+        try:
+            async with httpx.AsyncClient(timeout=httpx.Timeout(60.0, connect=10.0)) as client:
+                response = await client.post("https://api.imgbb.com/1/upload", data=payload)
+            if response.status_code == 200:
+                return response.json()["data"]["url"]
+            # 5xx or other errors: keep text for diagnostics
+            last_error = HTTPException(status_code=500, detail=response.text)
+        except Exception as exc:  # timeouts/network
+            last_error = exc
+        # small backoff before retry
+        await asyncio.sleep(1.5 * (attempt + 1))
 
-    if response.status_code == 200:
-        return response.json()["data"]["url"]
-    else:
-        raise HTTPException(status_code=500, detail=response.text)
+    # All attempts failed
+    if isinstance(last_error, HTTPException):
+        raise last_error
+    raise HTTPException(status_code=500, detail=f"Image upload failed: {last_error}")
 
 
 def create_password_hash(password: str) -> str:
