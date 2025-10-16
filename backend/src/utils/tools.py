@@ -11,6 +11,7 @@ from sqlalchemy.future import select
 from fastapi import HTTPException
 
 from database import get_db
+import asyncio
 from src.auth.models import User
 from src.core.settings import settings
 
@@ -130,10 +131,41 @@ async def trigger_revalidate(
         async with httpx.AsyncClient(timeout=10) as client:
             resp = await client.post(url, json=payload, headers=headers)
             resp.raise_for_status()
-            return resp.json()
+            data = resp.json()
+            # Background warmup for all revalidated paths to prebuild HTML immediately
+            try:
+                paths_for_warmup = []
+                if isinstance(data, dict) and isinstance(data.get("revalidated"), list):
+                    paths_for_warmup = [p for p in data["revalidated"] if isinstance(p, str)]
+                if paths_for_warmup:
+                    asyncio.create_task(_warmup_pages(paths_for_warmup))
+            except Exception:
+                pass
+            return data
     except httpx.HTTPStatusError as exc:
         # Bubble up with details for admin logs
         raise HTTPException(status_code=exc.response.status_code, detail=f"Revalidate failed: {exc.response.text}")
     except Exception as exc:  # network or unexpected
         raise HTTPException(status_code=500, detail=f"Revalidate request error: {exc}")
+
+
+async def _warmup_pages(paths: list[str]) -> None:
+    """Fire-and-forget GETs to Next.js via nginx to prebuild pages.
+    Keeps footprint very low (1 request per path), ignores errors.
+    """
+    if not paths:
+        return
+    base = settings.FRONTEND_INTERNAL_URL
+    # Prefer nginx if configured
+    # If user followed recommendation, FRONTEND_INTERNAL_URL may already be http://nginx:81
+    try:
+        async with httpx.AsyncClient(timeout=5) as client:
+            for p in paths:
+                try:
+                    url = f"{base}{p}" if base.endswith('/') is False else f"{base[:-1]}{p}"
+                    await client.get(url, headers={"x-internal-warmup": "1"})
+                except Exception:
+                    pass
+    except Exception:
+        pass
 
