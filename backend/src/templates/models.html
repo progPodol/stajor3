@@ -18,7 +18,7 @@
 <!-- Фильтры -->
 <div class="card border-0 mb-4" style="background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px);">
     <div class="card-body p-3">
-        <div class="d-flex flex-wrap gap-2">
+        <div class="d-flex flex-wrap gap-2 mb-3">
             <a href="/admin/models" class="btn {% if not selected_role %}btn-primary{% else %}btn-outline-primary{% endif %} rounded-pill">
                 <i class="bi bi-people me-1"></i>Все
             </a>
@@ -31,6 +31,23 @@
             <a href="/admin/models?role=indi" class="btn {% if selected_role == 'indi' %}btn-info{% else %}btn-outline-info{% endif %} rounded-pill">
                 <i class="bi bi-person me-1"></i>Indi
             </a>
+        </div>
+        
+        <!-- Фильтр по сервисам -->
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+            <span class="fw-semibold text-muted me-2">
+                <i class="bi bi-gear me-1"></i>Сервис:
+            </span>
+            <a href="/admin/models{% if selected_role %}?role={{ selected_role }}{% endif %}" 
+               class="btn {% if not selected_service_id %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm rounded-pill">
+                Все сервисы
+            </a>
+            {% for service in services %}
+            <a href="/admin/models?service_id={{ service.id }}{% if selected_role %}&role={{ selected_role }}{% endif %}" 
+               class="btn {% if selected_service_id == service.id %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm rounded-pill">
+                {{ service.name }}
+            </a>
+            {% endfor %}
         </div>
     </div>
 </div>
@@ -57,8 +74,11 @@
                         <th class="border-0 py-3">
                             <i class="bi bi-currency-exchange me-2"></i>Цена / час
                         </th>
+                        <th class="border-0 py-3">
+                            <i class="bi bi-gear me-2"></i>Сервисы
+                        </th>
                         <th class="border-0 py-3 pe-4">
-                            <i class="bi bi-gear me-2"></i>Действия
+                            <i class="bi bi-tools me-2"></i>Действия
                         </th>
                     </tr>
                 </thead>
@@ -97,6 +117,19 @@
                         <td class="py-3">
                             <div class="fw-bold text-success">{{ girl.price_per_hour }} AED</div>
                             <small class="text-muted">за час</small>
+                        </td>
+                        <td class="py-3">
+                            {% if girl.services %}
+                                <div class="d-flex flex-wrap gap-1">
+                                    {% for service in girl.services %}
+                                    <span class="badge bg-secondary rounded-pill" style="font-size: 0.7rem;">
+                                        {{ service.name }}
+                                    </span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <span class="text-muted small">Не привязана к сервисам</span>
+                            {% endif %}
                         </td>
                         <td class="py-3 pe-4">
                             <div class="d-flex gap-2">

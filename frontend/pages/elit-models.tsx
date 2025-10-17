@@ -50,8 +50,9 @@ const ElitModels: NextPage<ElitModelsProps> = ({ initialGirls, services, contact
     if (loading || !hasMore) return;
     setLoading(true);
     try {
+      const siteUrl = contact?.url || window.location.origin;
       const res = await fetch(
-        apiUrl(`/girls/get-by-role/elit?offset=${offset}&limit=${LIMIT}`, false)
+        apiUrl(`/girls/get-by-role/elit?offset=${offset}&limit=${LIMIT}&site_url=${encodeURIComponent(siteUrl)}`, false)
       );
       if (!res.ok) {
         setHasMore(false);
@@ -98,10 +99,11 @@ const ElitModels: NextPage<ElitModelsProps> = ({ initialGirls, services, contact
     </MainLayout>
   );
 };
-export const getServerSideProps: GetServerSideProps<ElitModelsProps> = async ({ locale }) => {
+export const getServerSideProps: GetServerSideProps<ElitModelsProps> = async ({ locale, req }) => {
   try {
+    const siteUrl = req.headers.host ? `https://${req.headers.host}` : 'http://localhost:3000';
     const [girlsRes, servicesRes, contactRes] = await Promise.all([
-      fetch(apiUrl(`/girls/get-by-role/elit?offset=0&limit=${LIMIT}`, true)),
+      fetch(apiUrl(`/girls/get-by-role/elit?offset=0&limit=${LIMIT}&site_url=${encodeURIComponent(siteUrl)}`, true)),
       fetch(apiUrl(`/services/all`, true)),
       fetch(apiUrl(`/sites/all`, true)),
     ]);

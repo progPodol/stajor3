@@ -36,9 +36,10 @@ async def admin_dashboard(request: Request, _: str = Depends(get_current_superus
 async def admin_models_view(
         request: Request,
         role: Optional[str] = "",
+        service_id: Optional[int] = None,
         db: AsyncSessions = Depends(get_db), _: str = Depends(get_current_superuser)
 ):
-    query = select(Girls).options(selectinload(Girls.photos))
+    query = select(Girls).options(selectinload(Girls.photos), selectinload(Girls.services))
 
     if role == "new":
         query = query.where(Girls.new.is_(True))
@@ -47,13 +48,23 @@ async def admin_models_view(
     elif role == "indi":
         query = query.where(Girls.indi.is_(True))
 
+    # Фильтрация по сервису, если указан
+    if service_id:
+        query = query.join(Girls.services).where(Service.id == service_id)
+
     result = await db.execute(query)
     girls = result.scalars().all()
+
+    # Получаем все сервисы для фильтра
+    services_result = await db.execute(select(Service))
+    services = services_result.scalars().all()
 
     return templates.TemplateResponse("models.html", {
         "request": request,
         "girls": girls,
         "selected_role": role,
+        "selected_service_id": service_id,
+        "services": services,
         "current_year": datetime.now().year
     })
 
@@ -195,7 +206,7 @@ async def login_form(request: Request):
 @router.get("/sites", response_class=HTMLResponse)
 async def admin_sites_view(request: Request, db: AsyncSessions = Depends(get_db),
                            _: str = Depends(get_current_superuser)):
-    result = await db.execute(select(Sites))
+    result = await db.execute(select(Sites).options(selectinload(Sites.service)))
     sites = result.scalars().all()
     return templates.TemplateResponse("sites.html", {
         "request": request,
@@ -219,9 +230,15 @@ async def edit_site_view(site_id: int, request: Request, db: AsyncSessions = Dep
     site = result.scalar_one_or_none()
     if not site:
         raise HTTPException(status_code=404, detail="Site not found")
+    
+    # Получаем все сервисы для выбора
+    services_result = await db.execute(select(Service))
+    services = services_result.scalars().all()
+    
     return templates.TemplateResponse("edit_site.html", {
         "request": request,
         "site": site,
+        "services": services,
         "current_year": datetime.now().year
     })
 
@@ -235,6 +252,7 @@ async def edit_site_form(
         url: str = Form(...),
         image: str = Form(...),
         type: str = Form(...),
+        service_id: Optional[int] = Form(None),
         db: AsyncSessions = Depends(get_db)
 ):
     result = await db.execute(select(Sites).where(Sites.id == site_id))
@@ -248,6 +266,7 @@ async def edit_site_form(
     site.url = url
     site.image = image
     site.type = type
+    site.service_id = service_id
 
     db.add(site)
     await db.commit()

@@ -169,6 +169,8 @@ async def create_model(
 async def get_all_girls(
         offset: int = Query(0, ge=0),
         limit: int = Query(6, ge=1, le=50),
+        service_slug: Optional[str] = Query(None),
+        site_url: Optional[str] = Query(None),
         db: AsyncSessions = Depends(get_db)
 ):
     query = (
@@ -179,6 +181,26 @@ async def get_all_girls(
         .offset(offset)
         .limit(limit)
     )
+    
+    # Фильтрация по сервису, если указан
+    if service_slug:
+        query = query.join(Girls.services).where(Service.slug == service_slug)
+    
+    # Фильтрация по сайту, если указан
+    if site_url:
+        # Получаем сервисы, связанные с сайтом
+        from src.managements.models import Sites
+        sites_query = select(Sites).where(Sites.url == site_url)
+        sites_result = await db.execute(sites_query)
+        site = sites_result.scalar_one_or_none()
+        
+        if site and site.service_id:
+            # Фильтруем модели только по сервису, связанному с сайтом
+            query = query.join(Girls.services).where(Service.id == site.service_id)
+        elif site:
+            # Если сайт не связан с сервисом, не показываем модели
+            return []
+    
     result = await db.execute(query)
     girls = result.scalars().all()
     return girls
@@ -188,6 +210,8 @@ async def get_by_role(
         role: str,
         offset: int = Query(0, ge=0),
         limit: int = Query(6, ge=1, le=50),
+        service_slug: Optional[str] = Query(None),
+        site_url: Optional[str] = Query(None),
         db: AsyncSessions = Depends(get_db),
 ):
     if role not in ["indi", "new", "elit"]:
@@ -212,6 +236,25 @@ async def get_by_role(
         .offset(offset)
         .limit(limit)
     )
+
+    # Фильтрация по сервису, если указан
+    if service_slug:
+        query = query.join(Girls.services).where(Service.slug == service_slug)
+    
+    # Фильтрация по сайту, если указан
+    if site_url:
+        # Получаем сервисы, связанные с сайтом
+        from src.managements.models import Sites
+        sites_query = select(Sites).where(Sites.url == site_url)
+        sites_result = await db.execute(sites_query)
+        site = sites_result.scalar_one_or_none()
+        
+        if site and site.service_id:
+            # Фильтруем модели только по сервису, связанному с сайтом
+            query = query.join(Girls.services).where(Service.id == site.service_id)
+        elif site:
+            # Если сайт не связан с сервисом, не показываем модели
+            return []
 
     result = await db.execute(query)
     girls = result.scalars().all()
