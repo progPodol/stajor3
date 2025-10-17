@@ -206,7 +206,7 @@ async def login_form(request: Request):
 @router.get("/sites", response_class=HTMLResponse)
 async def admin_sites_view(request: Request, db: AsyncSessions = Depends(get_db),
                            _: str = Depends(get_current_superuser)):
-    result = await db.execute(select(Sites))
+    result = await db.execute(select(Sites).options(selectinload(Sites.service)))
     sites = result.scalars().all()
     return templates.TemplateResponse("sites.html", {
         "request": request,
@@ -230,9 +230,15 @@ async def edit_site_view(site_id: int, request: Request, db: AsyncSessions = Dep
     site = result.scalar_one_or_none()
     if not site:
         raise HTTPException(status_code=404, detail="Site not found")
+    
+    # Получаем все сервисы для выбора
+    services_result = await db.execute(select(Service))
+    services = services_result.scalars().all()
+    
     return templates.TemplateResponse("edit_site.html", {
         "request": request,
         "site": site,
+        "services": services,
         "current_year": datetime.now().year
     })
 
@@ -246,6 +252,7 @@ async def edit_site_form(
         url: str = Form(...),
         image: str = Form(...),
         type: str = Form(...),
+        service_id: Optional[int] = Form(None),
         db: AsyncSessions = Depends(get_db)
 ):
     result = await db.execute(select(Sites).where(Sites.id == site_id))
@@ -259,6 +266,7 @@ async def edit_site_form(
     site.url = url
     site.image = image
     site.type = type
+    site.service_id = service_id
 
     db.add(site)
     await db.commit()

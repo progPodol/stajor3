@@ -4,6 +4,10 @@ from sqlalchemy import Table, ForeignKey, String, Integer, Boolean, Column, Date
 from sqlalchemy.orm import relationship, mapped_column, Mapped
 from src.core.base import Base
 from datetime import datetime
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from src.managements.models import Sites
 
 girl_service_association = Table(
     "girl_service_association",

@@ -15,6 +15,7 @@
             <th>Telegram</th>
             <th>WhatsApp</th>
             <th>Тип</th>
+            <th>Сервис</th>
             <th>Действия</th>
         </tr>
     </thead>
@@ -27,6 +28,13 @@
             <td>{{ site.telegram }}</td>
             <td>{{ site.whatsapp }}</td>
             <td>{{ site.type }}</td>
+            <td>
+                {% if site.service %}
+                    <span class="badge bg-primary">{{ site.service.name }}</span>
+                {% else %}
+                    <span class="text-muted">Не привязан</span>
+                {% endif %}
+            </td>
             <td>
                 <a href="/admin/sites/{{ site.id }}/edit" class="btn btn-sm btn-warning">
                     <i class="bi bi-pencil-square"></i> Ред.

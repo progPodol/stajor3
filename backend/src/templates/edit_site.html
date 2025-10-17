@@ -28,6 +28,17 @@
         <label class="form-label">Тип</label>
         <input type="text" name="type" value="{{ site.type }}" class="form-control">
     </div>
+    <div class="col-md-6">
+        <label class="form-label">Сервис</label>
+        <select name="service_id" class="form-select">
+            <option value="">Выберите сервис</option>
+            {% for service in services %}
+            <option value="{{ service.id }}" {% if site.service_id == service.id %}selected{% endif %}>
+                {{ service.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
     <div class="col-12">
         <button type="submit" class="btn btn-primary">
             <i class="bi bi-save"></i> Сохранить
