@@ -169,6 +169,7 @@ async def create_model(
 async def get_all_girls(
         offset: int = Query(0, ge=0),
         limit: int = Query(6, ge=1, le=50),
+        service_slug: Optional[str] = Query(None),
         db: AsyncSessions = Depends(get_db)
 ):
     query = (
@@ -179,6 +180,11 @@ async def get_all_girls(
         .offset(offset)
         .limit(limit)
     )
+    
+    # Фильтрация по сервису, если указан
+    if service_slug:
+        query = query.join(Girls.services).where(Service.slug == service_slug)
+    
     result = await db.execute(query)
     girls = result.scalars().all()
     return girls
@@ -188,6 +194,7 @@ async def get_by_role(
         role: str,
         offset: int = Query(0, ge=0),
         limit: int = Query(6, ge=1, le=50),
+        service_slug: Optional[str] = Query(None),
         db: AsyncSessions = Depends(get_db),
 ):
     if role not in ["indi", "new", "elit"]:
@@ -212,6 +219,10 @@ async def get_by_role(
         .offset(offset)
         .limit(limit)
     )
+
+    # Фильтрация по сервису, если указан
+    if service_slug:
+        query = query.join(Girls.services).where(Service.slug == service_slug)
 
     result = await db.execute(query)
     girls = result.scalars().all()

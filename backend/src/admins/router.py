@@ -36,9 +36,10 @@ async def admin_dashboard(request: Request, _: str = Depends(get_current_superus
 async def admin_models_view(
         request: Request,
         role: Optional[str] = "",
+        service_id: Optional[int] = None,
         db: AsyncSessions = Depends(get_db), _: str = Depends(get_current_superuser)
 ):
-    query = select(Girls).options(selectinload(Girls.photos))
+    query = select(Girls).options(selectinload(Girls.photos), selectinload(Girls.services))
 
     if role == "new":
         query = query.where(Girls.new.is_(True))
@@ -47,13 +48,23 @@ async def admin_models_view(
     elif role == "indi":
         query = query.where(Girls.indi.is_(True))
 
+    # Фильтрация по сервису, если указан
+    if service_id:
+        query = query.join(Girls.services).where(Service.id == service_id)
+
     result = await db.execute(query)
     girls = result.scalars().all()
+
+    # Получаем все сервисы для фильтра
+    services_result = await db.execute(select(Service))
+    services = services_result.scalars().all()
 
     return templates.TemplateResponse("models.html", {
         "request": request,
         "girls": girls,
         "selected_role": role,
+        "selected_service_id": service_id,
+        "services": services,
         "current_year": datetime.now().year
     })
 

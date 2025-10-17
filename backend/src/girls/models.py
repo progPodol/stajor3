@@ -67,3 +67,4 @@ class Service(Base):
         secondary=girl_service_association,
         back_populates="services"
     )
+    sites: Mapped[list["Sites"]] = relationship("Sites", back_populates="service")
